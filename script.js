@@ -1,57 +1,59 @@
-const p1 = document.querySelector('#p1');
-const p2 = document.querySelector('#p2');
+const player1 = {
+    score: document.querySelector('#p1'),
+    button: document.querySelector('#p1-button')
+};
+
+const player2 = {
+    score: document.querySelector('#p2'),
+    button: document.querySelector('#p2-button')
+};
+
 const rounds = document.querySelector('#select-rounds')
-const p1Button = document.querySelector('#p1-button');
-const p2Button = document.querySelector('#p2-button');
 const reset = document.querySelector('#reset');
 const darkMode = document.querySelector('#dark-mode');
 
-p1Button.addEventListener('click', function (e) {
-    addToScore(p1);
-
-    if (p1.innerText === rounds.value) {
-        p1.classList.add('winner');
-        p2.classList.add('loser');
-        p1Button.disabled = true;
-        p2Button.disabled = true;
-    }
+player1.button.addEventListener('click', function (e) {
+    addToScore(player1);
+    winner(player1, player2);
 });
 
-p2Button.addEventListener('click', function (e) {
-    addToScore(p2);
-
-    if (p2.innerText === rounds.value) {
-        p2.classList.add('winner');
-        p1.classList.add('loser');
-        p1Button.disabled = true;
-        p2Button.disabled = true;
-    }
+player2.button.addEventListener('click', function (e) {
+    addToScore(player2);
+    winner(player2, player1);
 });
 
 reset.addEventListener('click', function (e) {
-    resetScore(p1);
-    resetScore(p2);
-    p1Button.disabled = false;
-    p2Button.disabled = false;
+    resetScore(player1);
+    resetScore(player2);
 })
 
 function addToScore(player) {
-    let currentScore = parseInt(player.innerText);
+    let currentScore = parseInt(player.score.innerText);
     currentScore++;
-    player.innerText = currentScore;
+    player.score.innerText = currentScore;
+}
+
+function winner(player, opponent) {
+    if (player.score.innerText === rounds.value) {
+        player.score.classList.add('winner');
+        opponent.score.classList.add('loser');
+        opponent.button.disabled = true;
+        player.button.disabled = true;
+    }
 }
 
 function resetScore(player) {
-    player.innerText = 0;
-    player.classList.remove('winner');
-    player.classList.remove('loser');
-    player.style.color = document.body.style.color;
+    player.score.innerText = 0;
+    player.score.classList.remove('winner');
+    player.score.classList.remove('loser');
+    player.button.disabled = false;
+    player.score.style.color = document.body.style.color;
 }
 
-darkMode.addEventListener('click', function(e) {
+darkMode.addEventListener('click', function (e) {
     document.body.classList.toggle('darkmode');
 
     if (document.body.classList.contains('darkmode')) {
         darkMode.innerText = 'Light Mode';
-    }else darkMode.innerText = 'Dark Mode';
+    } else darkMode.innerText = 'Dark Mode';
 })
